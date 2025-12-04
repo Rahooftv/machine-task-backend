@@ -1,6 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors"
+import path from "path";
 import authRoute from "./modules/auth/auth.route"
 import taskRoute from "./modules/task/task.route"
 
@@ -18,6 +19,11 @@ app.use(cors({
   origin: "http://localhost:5173",
   credentials: true, 
 }));
+
+
+
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+
 
 
 app.use("/auth",authRoute)

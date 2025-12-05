@@ -7,6 +7,7 @@ const router = express.Router()
 
 router.post("/add", upload.single("attachment"), taskController.createTask)
 router.get("/", taskController.getTasks)
+router.get("/:id", taskController.getTaskById)
 router.put("/:id", upload.single("attachment"), taskController.updateTask)
 router.delete("/:id", taskController.deleteTask);
 

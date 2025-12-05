@@ -27,7 +27,7 @@ app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 
 app.use("/auth",authRoute)
-app.use("/task/", authMiddleware.protect , taskRoute)
+app.use("/task", authMiddleware.protect , taskRoute)
 
 
 

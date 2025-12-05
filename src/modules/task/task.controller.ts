@@ -27,6 +27,16 @@ export const taskController = {
     }
   },
 
+  getTaskById: async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const task = await taskService.getTaskById(req.params.id, (req as any).userId);
+    res.json({ task });
+  } catch (err) {
+    next(err);
+  }
+},
+
+
   updateTask: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const filePath = req.file ? `/uploads/${req.file.filename}` :undefined

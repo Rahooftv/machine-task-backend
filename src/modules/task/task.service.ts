@@ -18,6 +18,15 @@ export const taskService = {
     return await Task.find({ user: userId }).sort({ createdAt: -1 })
   },
 
+  getTaskById: async (taskId: string, userId: string) => {
+  const task = await Task.findOne({ _id: taskId, user: userId });
+
+  if (!task) throw { statusCode: 404, message: "Task not found" };
+
+  return task;
+},
+
+
   updateTask: async (taskId: string, userId: string, data: any, filePath?: string) => {
     const updateData: any = {
       title: data.title,

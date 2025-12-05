@@ -14,9 +14,20 @@ export const taskService = {
     return task
   },
 
-  getTasks: async (userId: string) => {
-    return await Task.find({ user: userId }).sort({ createdAt: -1 })
-  },
+getTasks: async (userId: string, status?: string, search?: string) => {
+  const filter: any = { user: userId }
+
+  if (status && status !== "all") {
+    filter.status = status;
+  }
+
+  if (search) {
+    filter.title = { $regex: search, $options: "i" }
+  }
+
+  return await Task.find(filter).sort({ createdAt: -1 })
+},
+
 
   getTaskById: async (taskId: string, userId: string) => {
   const task = await Task.findOne({ _id: taskId, user: userId });

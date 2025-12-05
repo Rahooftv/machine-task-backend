@@ -14,19 +14,41 @@ export const taskService = {
     return task
   },
 
-getTasks: async (userId: string, status?: string, search?: string) => {
-  const filter: any = { user: userId }
+    getTasks: async (
+      userId: string,
+      status?: string,
+      search?: string,
+      page: number = 1,
+      limit: number = 4
+    ) => {
+      const filter: any = { user: userId }
 
-  if (status && status !== "all") {
-    filter.status = status;
-  }
+      if (status && status !== "all"){
+        filter.status = status;
+      }
 
-  if (search) {
-    filter.title = { $regex: search, $options: "i" }
-  }
+      if (search) {
+        filter.title = { $regex: search, $options: "i" }
+      }
 
-  return await Task.find(filter).sort({ createdAt: -1 })
-},
+      const skip = (page - 1) * limit
+
+      const tasks = await Task.find(filter)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit);
+
+
+      const totalTasks = await Task.countDocuments(filter)
+
+      return {
+        tasks,
+        currentPage: page,
+        totalPages: Math.ceil(totalTasks / limit),
+        totalTasks,
+      };
+    },
+
 
 
   getTaskById: async (taskId: string, userId: string) => {

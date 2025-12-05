@@ -18,19 +18,26 @@ export const taskController = {
     }
   },
 
- getTasks: async (req: Request, res: Response, next: NextFunction) => {
+getTasks: async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = (req as any).userId
 
-    const { status, search } = req.query
+    const { status,search,page = "1",limit = "4" } = req.query
 
-    const tasks = await taskService.getTasks(userId, status as string, search as string)
+    const result = await taskService.getTasks(
+      userId,
+      status as string,
+      search as string,
+      parseInt(page as string),
+      parseInt(limit as string)
+    );
 
-    res.json({ tasks })
+    res.json(result)
   } catch (err) {
-    next(err)
+    next(err);
   }
 },
+
 
 
   getTaskById: async (req: Request, res: Response, next: NextFunction) => {
